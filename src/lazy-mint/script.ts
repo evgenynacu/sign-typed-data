@@ -22,14 +22,14 @@ async function signLazyMint(form: Omit<LazyMint, "signatures">): Promise<LazyMin
 	const signature = await signLazyMintMessage(
 		form,
 		form.creators[0].account,
-		3,
+		1,
 		getAddress(form["@type"])
 	);
 	return { ...form, signatures: [signature] } as any
 }
 
 function getAddress(type: "ERC721" | "ERC1155"): string {
-	return type === "ERC721" ? "0xB0EA149212Eb707a1E5FC1D2d3fD318a8d94cf05" : "0x6a94aC200342AC823F909F142a65232E2f052183"
+	return type === "ERC721" ? "0x3482549fca7511267c9ef7089507c0f16ea1dcc1" : "0x3482549fca7511267c9ef7089507c0f16ea1dcc1"
 }
 
 async function signLazyMintMessage(

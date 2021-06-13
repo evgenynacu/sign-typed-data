@@ -29,7 +29,7 @@ async function signLazyMint(form: Omit<LazyMint, "signatures">): Promise<LazyMin
 }
 
 function getAddress(type: "ERC721" | "ERC1155"): string {
-	return type === "ERC721" ? "0x3482549fca7511267c9ef7089507c0f16ea1dcc1" : "0x3482549fca7511267c9ef7089507c0f16ea1dcc1"
+	return type === "ERC721" ? "0xf6793da657495ffeff9ee6350824910abc21356c" : "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8"
 }
 
 async function signLazyMintMessage(

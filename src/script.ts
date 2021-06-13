@@ -8,7 +8,7 @@ const provider = (window as any).ethereum
 export const web3 = new Web3(provider)
 
 export const client = axios.create({
-	baseURL: "https://api-dev.rarible.com",
+	baseURL: "https://api.rarible.com",
 })
 
 // @ts-ignore

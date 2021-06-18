@@ -2,7 +2,7 @@ import Web3 from "web3"
 import 'regenerator-runtime/runtime'
 import axios from "axios"
 import { testSignAndCreateLazyMint } from "./lazy-mint/script"
-import { createAndSignOrder } from "./order/script"
+import { createAndSignOrder, matchOrder } from "./order/script"
 
 const provider = (window as any).ethereum
 export const web3 = new Web3(provider)
@@ -17,6 +17,11 @@ const contractInput: HTMLInputElement = document.getElementById("contract")
 const tokenIdInput: HTMLInputElement = document.getElementById("tokenId")
 // @ts-ignore
 const priceInput: HTMLInputElement = document.getElementById("price")
+// @ts-ignore
+const hashInput: HTMLInputElement = document.getElementById("hash")
+// @ts-ignore
+const amountInput: HTMLInputElement = document.getElementById("amount")
+
 
 document.getElementById("connect")?.addEventListener("click", (e) => {
 	e.preventDefault()
@@ -39,6 +44,16 @@ document.getElementById("createLazyMint")?.addEventListener("click", (e) => {
 document.getElementById("createOrder")?.addEventListener("click", (e) => {
 	e.preventDefault()
 	createAndSignOrder(contractInput.value, tokenIdInput.value, priceInput.value)
+		.then(x => {
+			hashInput.value = x.hash
+			console.log("SENT", x)
+		})
+		.catch(err => console.error("ERROR", err))
+})
+
+document.getElementById("matchOrder")?.addEventListener("click", (e) => {
+	e.preventDefault()
+	matchOrder(hashInput.value, parseInt(amountInput.value))
 		.then(x => console.log("SENT", x))
 		.catch(err => console.error("ERROR", err))
 })

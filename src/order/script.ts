@@ -1,6 +1,6 @@
 import { EIP712Domain, EIP712SignMessage, EncodedOrder, OrderForm } from "./domain"
 import { createTypeData, getAccount, signTypedData } from "../sign"
-import { client } from "../script"
+import { client, web3 } from "../script"
 
 async function signOrderMessage(
 	struct: any,
@@ -77,4 +77,22 @@ export async function createAndSignOrder(contract: string, tokenId: string, pric
 async function signAndPut(notSignedOrderForm: Omit<OrderForm, "signature">) {
 	const signed = await signOrderForm(notSignedOrderForm)
 	return putOrder(signed)
+}
+
+export async function matchOrder(hash: string, amount: number): Promise<any> {
+	const maker = await getAccount()
+	const preparedTx = await prepareTx(hash, maker, amount)
+	const tx = {
+		from: maker,
+		data: preparedTx.transaction.data,
+		to: preparedTx.transaction.to,
+		value: preparedTx.asset.value
+	}
+	console.log("sending tx", tx);
+	return web3.eth.sendTransaction(tx)
+}
+
+async function prepareTx(hash: string, maker: string, amount: number): Promise<any> {
+	const res = await client.post<any>(`/protocol/v0.1/ethereum/order/orders/${hash}/prepareTx`, { maker, amount, payouts: [], originFees: [] })
+	return res.data
 }

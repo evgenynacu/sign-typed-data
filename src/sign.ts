@@ -1,4 +1,4 @@
-import { signTypedData_v4 } from "eth-sig-util"
+import { signTypedData_v4, TypedDataUtils } from "eth-sig-util"
 import { privateToAddress } from "ethereumjs-util"
 import { web3 } from "./script"
 
@@ -59,7 +59,15 @@ export async function signTypedData(from: string, data: any) {
     }
     return signTypedData_v4(Buffer.from(privateKey.value, "hex"), { data })
   } else {
-    const msgData = JSON.stringify(data);
+    const signer = await getAccount()
+    console.log("data is", data)
+    const msg = TypedDataUtils.sign(data)
+    let hex = msg.toString("hex")
+    console.log("msg is", msg, hex, hex.length)
+    const sig = await web3.eth.sign(`0x${msg.toString("hex")}`, signer)
+    console.log("sig is", sig)
+    return sig
+    /*const msgData = JSON.stringify(data);
     return (await new Promise<any>((resolve, reject) => {
       function cb(err: any, result: any) {
         if (err) return reject(err);
@@ -78,7 +86,7 @@ export async function signTypedData(from: string, data: any) {
         params: [from, msgData],
         from
       }, cb);
-    })).sig
+    })).sig*/
   }
 }
 

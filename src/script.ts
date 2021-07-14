@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime'
 import axios from "axios"
 import { testSignAndCreateLazyMint } from "./lazy-mint/script"
 import { createAndSignOrder, matchOrder } from "./order/script"
+import { getAccount } from "./sign"
 
 const provider = (window as any).ethereum
 export const web3 = new Web3(provider)
@@ -57,3 +58,16 @@ document.getElementById("matchOrder")?.addEventListener("click", (e) => {
 		.then(x => console.log("SENT", x))
 		.catch(err => console.error("ERROR", err))
 })
+
+document.getElementById("test")?.addEventListener("click", e => {
+	e.preventDefault()
+	testSign().then(console.log)
+})
+
+async function testSign() {
+	const signer = await getAccount()
+	console.log("signer is", signer)
+	return await web3.eth.sign("0x12345678901234567890123456789012", signer)
+	//
+	// return await (web3.eth.personal as any).sign("11Ằ☭:fox_face::mouse:ößt 桜どラ ❉", signer)
+}

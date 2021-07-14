@@ -65,7 +65,7 @@ export async function createTestLazyMint(): Promise<Omit<LazyMint, "signatures">
 		tokenId: tokenId,
 		uri: "/ipfs/QmWLsBu6nS4ovaHbGAXprD1qEssJu4r5taQfB74sCG51tp",
 		creators: [{ account: creator, value: "10000" }],
-		royalties: []
+		royalties: [ { account: creator, value: "500" } ]
 	}
 }
 
